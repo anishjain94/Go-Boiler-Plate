@@ -12,7 +12,7 @@ type SuccessDto struct {
 }
 
 type AckDto struct {
-	Success bool   `json:"success"`
+	Success bool   `json:"success"` 
 	Code    string `json:"code"`
 }
 
