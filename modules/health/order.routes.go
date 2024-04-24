@@ -1,7 +1,7 @@
 package health
 
 import (
-	"ecommerce/utils"
+	"go-boiler-plate/utils"
 	"net/http"
 
 	"github.com/gorilla/mux"

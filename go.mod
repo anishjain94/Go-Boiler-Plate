@@ -1,4 +1,4 @@
-module ecommerce
+module go-boiler-plate
 
 go 1.22.0
 

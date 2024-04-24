@@ -1,9 +1,9 @@
 package rest
 
 import (
-	"ecommerce/infra/environment"
-	"ecommerce/modules/health"
 	"fmt"
+	"go-boiler-plate/infra/environment"
+	"go-boiler-plate/modules/health"
 	"log"
 	"net/http"
 
