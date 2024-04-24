@@ -32,8 +32,6 @@ This repository provides a boilerplate for Go (Golang) projects, designed to pro
 
 ## Getting Started
 
-Another level 2 header for a new section.
-
 1. Clone this repository to your local machine.
 2. Navigate to the project directory.
 3. Run go mod tidy to download the necessary dependencies.

@@ -79,3 +79,4 @@ package-lock.json
 raw.json
 decrypted.json
 encrypted.json
+*.todo
