@@ -4,9 +4,11 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"time"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var gormDB *gorm.DB
@@ -20,15 +22,16 @@ func InitializeGorm() {
 		os.Getenv("POSTGRES_PASSWORD"),
 		os.Getenv("POSTGRES_DBNAME"))
 
-	db, err := gorm.Open(postgres.Open(dns), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dns), &gorm.Config{
+		Logger:  logger.Default,
+		NowFunc: time.Now().UTC,
+	})
 
-	fmt.Println(dns)
 	if err != nil {
 		panic("failed to connect database")
 	}
 
 	gormDB = db
-	fmt.Println("Db connected.")
 }
 
 func GetDb(ctx *context.Context) *gorm.DB {

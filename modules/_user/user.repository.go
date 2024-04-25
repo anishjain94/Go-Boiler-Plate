@@ -1,0 +1,23 @@
+package user
+
+import (
+	"context"
+	"go-boiler-plate/infra/database"
+	"go-boiler-plate/utils"
+
+	"gorm.io/gorm"
+)
+
+func GetUser(ctx *context.Context) (*User, error) {
+
+	db := database.GetDb(ctx)
+
+	user := User{}
+
+	result := db.Find(&user, &User{Model: gorm.Model{ID: 8}})
+
+	// fmt.Println(result.Statement.WriteString())
+
+	return utils.HandleDbResponseError(result, "not found", &user)
+
+}
