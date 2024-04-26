@@ -3,7 +3,7 @@ package user
 import (
 	"context"
 	"go-boiler-plate/infra/database"
-	"go-boiler-plate/utils"
+	"go-boiler-plate/util"
 
 	"gorm.io/gorm"
 )
@@ -18,6 +18,6 @@ func GetUser(ctx *context.Context) (*User, error) {
 
 	// fmt.Println(result.Statement.WriteString())
 
-	return utils.HandleDbResponseError(result, "not found", &user)
+	return util.HandleDbResponseError(result, "not found", &user)
 
 }

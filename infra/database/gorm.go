@@ -23,7 +23,7 @@ func InitializeGorm() {
 		os.Getenv("POSTGRES_DBNAME"))
 
 	db, err := gorm.Open(postgres.Open(dns), &gorm.Config{
-		Logger:  logger.Default,
+		Logger:  logger.Default.LogMode(logger.Info),
 		NowFunc: time.Now().UTC,
 	})
 

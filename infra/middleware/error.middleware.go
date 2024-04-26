@@ -27,6 +27,8 @@ func HandleError(w http.ResponseWriter, r *http.Request) {
 	if err := recover(); err != nil {
 		ctx := r.Context()
 
+		w.Header().Set(string("Content-Type"), string("application/json"))
+
 		msg := getMessageFromError(err)
 		statusCode, msg := SeparateCodeFromMsg(&ctx, msg)
 

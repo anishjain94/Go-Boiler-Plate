@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"go-boiler-plate/infra/database"
 	"go-boiler-plate/infra/environment"
-	"go-boiler-plate/utils"
+	"go-boiler-plate/util"
 	"log"
 	"net/http"
 	"os"
@@ -27,7 +27,7 @@ func TestGetUser(t *testing.T) {
 	ctx := context.Background()
 
 	user, err := GetUser(&ctx)
-	utils.AssertError(err, http.StatusInternalServerError, "user not found")
+	util.AssertError(err, http.StatusInternalServerError, "user not found")
 
 	fmt.Printf("%+v", user)
 }
