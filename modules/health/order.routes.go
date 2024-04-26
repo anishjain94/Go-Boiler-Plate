@@ -1,13 +1,16 @@
 package health
 
 import (
-	"go-boiler-plate/utils"
+	util "go-boiler-plate/util"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
-func HealthRoute(router *mux.Router) {
-	router.HandleFunc("/", utils.HandleHTTPGet(getHealth)).Methods(http.MethodGet)
+func InitHealthRoute(router *mux.Router) {
+	healthRoute(router)
+}
 
+func healthRoute(router *mux.Router) {
+	router.HandleFunc("/", util.HandleHTTPGet(getHealth)).Methods(http.MethodGet)
 }

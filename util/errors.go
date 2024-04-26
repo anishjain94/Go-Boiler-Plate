@@ -1,4 +1,4 @@
-package utils
+package util
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 func AssertError(err error, statusCode int, errorMsg string) {
 	if err != nil {
 
-		errorMsg := fmt.Sprint(statusCode) + ":" + ":" + errorMsg
+		errorMsg := fmt.Sprint(statusCode) + ":" + errorMsg
 		panic(errorMsg)
 	}
 }
@@ -15,7 +15,7 @@ func AssertError(err error, statusCode int, errorMsg string) {
 func ErrorIf(condition bool, statusCode int, errorMsg string) {
 	if condition {
 
-		errorMsg := fmt.Sprint(statusCode) + ":" + ":" + errorMsg
+		errorMsg := fmt.Sprint(statusCode) + ":" + errorMsg
 		panic(errorMsg)
 	}
 }
