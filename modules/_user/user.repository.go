@@ -16,8 +16,5 @@ func GetUser(ctx *context.Context) (*User, error) {
 
 	result := db.Find(&user, &User{Model: gorm.Model{ID: 8}})
 
-	// fmt.Println(result.Statement.WriteString())
-
 	return util.HandleDbResponseError(result, "not found", &user)
-
 }

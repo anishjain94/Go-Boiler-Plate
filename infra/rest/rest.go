@@ -12,7 +12,6 @@ import (
 	"go.uber.org/zap"
 )
 
-// TODO: Create boiler plate for error middleware. this is where the erros are handled.
 func InitializeApiRestServer() {
 
 	router := mux.NewRouter().StrictSlash(true)

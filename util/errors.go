@@ -19,3 +19,10 @@ func ErrorIf(condition bool, statusCode int, errorMsg string) {
 		panic(errorMsg)
 	}
 }
+
+func Assert(condition bool, statusCode int, errorMsg string) {
+	if !condition {
+		errorMsg := fmt.Sprint(statusCode) + ":" + errorMsg
+		panic(errorMsg)
+	}
+}
