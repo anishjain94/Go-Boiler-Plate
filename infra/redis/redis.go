@@ -14,12 +14,12 @@ import (
 const MSG_REDIS_INIT_ERROR = "Redis Connection Failed"
 
 var (
-	redisClient redis.Client
+	redisClient *redis.Client
 )
 
-func InitializeRedisMap() {
+func InitializeRedis() {
 
-	redisClient := redis.NewClient(&redis.Options{
+	redisClient = redis.NewClient(&redis.Options{
 		Addr:     os.Getenv("REDIS_HOST") + ":" + os.Getenv("REDIS_PORT"),
 		Password: os.Getenv("REDIS_PASSWORD"),
 		Username: os.Getenv("REDIS_USER"),
