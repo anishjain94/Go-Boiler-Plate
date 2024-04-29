@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"go-boiler-plate/common"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 func HandleHTTPPost[InputDtoType any, OutputDtoType any](serviceFunc func(ctx *context.Context, dto *InputDtoType) *OutputDtoType) http.HandlerFunc {
@@ -65,6 +67,12 @@ func HandleHTTPPut[InputDtoType any, OutputDtoType any](serviceFunc func(ctx *co
 func HandleHTTPGet[OutputDtoType any](serviceFunc func(ctx *context.Context) *OutputDtoType) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
+
+		queries := r.URL.Query()
+		ctx = context.WithValue(ctx, "CTX_QUERIES", &queries)
+
+		params := mux.Vars(r)
+		ctx = context.WithValue(ctx, "CTX_PARAMS", &params)
 
 		response := serviceFunc(&ctx)
 
