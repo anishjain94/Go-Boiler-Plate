@@ -53,7 +53,7 @@ Thumbs.db
 *.mov
 *.wmv
 
-.env
+*.env
 staging.env
 dev.env
 dev_bkp.env

@@ -18,7 +18,7 @@ var (
 )
 
 func InitializeEnvs(variant ...string) {
-	err := godotenv.Load(os.ExpandEnv("$GOPATH/src/go-boiler-plate/.env"))
+	err := godotenv.Load(os.ExpandEnv("/Users/anish/Desktop/anish/Go-Boiler-Plate/.env"))
 	if err != nil {
 		log.Fatal("unable to load " + ".env file")
 	}
