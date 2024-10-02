@@ -36,11 +36,3 @@ This repository provides a boilerplate for Go (Golang) projects, designed to pro
 2. Navigate to the project directory.
 3. Run go mod tidy to download the necessary dependencies.
 4. Start building your application!
-
-## Contributing
-
-Contributions to this boilerplate are welcome! Please feel free to open an issue or submit a pull request with your improvements or suggestions.
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
