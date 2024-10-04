@@ -1,91 +1,64 @@
 package util
 
 import (
-	"context"
-	"encoding/json"
 	"go-boiler-plate/common"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 )
 
-func HandleHTTPPost[InputDtoType any, OutputDtoType any](serviceFunc func(ctx *context.Context, dto *InputDtoType) *OutputDtoType) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
-		pCtx := &ctx
-
+func HandleHTTPPost[InputDtoType any, OutputDtoType any](serviceFunc func(c *gin.Context, dto *InputDtoType) *OutputDtoType) gin.HandlerFunc {
+	return func(c *gin.Context) {
 		var dto InputDtoType
 
-		err := json.NewDecoder(r.Body).Decode(&dto)
-		AssertError(err, http.StatusBadRequest, "Invalid Request Body.")
+		if err := c.ShouldBindJSON(&dto); err != nil {
+			c.JSON(http.StatusBadRequest, common.ToErrorDto("Invalid Request Body"))
+			return
+		}
 
-		response := serviceFunc(pCtx, &dto)
+		response := serviceFunc(c, &dto)
 
-		w.Header().Set(string("Content-Type"), string("application/json"))
-
-		// extract or
-
-		responseEncodeError := json.NewEncoder(w).Encode(common.SuccessDto{
+		c.JSON(http.StatusOK, common.SuccessDto{
 			Meta: common.AckDto{
 				Success: true,
 				Code:    "SUCCESS",
 			},
 			Data: response,
 		})
-
-		AssertError(responseEncodeError, http.StatusInternalServerError, "Error while parsing")
 	}
 }
 
-func HandleHTTPPut[InputDtoType any, OutputDtoType any](serviceFunc func(ctx *context.Context, dto *InputDtoType) *OutputDtoType) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
-		pCtx := &ctx
-
+func HandleHTTPPut[InputDtoType any, OutputDtoType any](serviceFunc func(c *gin.Context, dto *InputDtoType) *OutputDtoType) gin.HandlerFunc {
+	return func(c *gin.Context) {
 		var dto InputDtoType
 
-		err := json.NewDecoder(r.Body).Decode(&dto)
-		AssertError(err, http.StatusBadRequest, "Invalid Request Body")
+		if err := c.ShouldBindJSON(&dto); err != nil {
+			c.JSON(http.StatusBadRequest, common.ToErrorDto("Invalid Request Body"))
+			return
+		}
 
-		response := serviceFunc(pCtx, &dto)
+		response := serviceFunc(c, &dto)
 
-		w.Header().Set(string("Content-Type"), string("application/json"))
-
-		responseEncodeError := json.NewEncoder(w).Encode(common.SuccessDto{
+		c.JSON(http.StatusOK, common.SuccessDto{
 			Meta: common.AckDto{
 				Success: true,
 				Code:    "SUCCESS",
 			},
 			Data: response,
 		})
-
-		AssertError(responseEncodeError, http.StatusInternalServerError, "Error while parsing")
-
 	}
 }
 
-func HandleHTTPGet[OutputDtoType any](serviceFunc func(ctx *context.Context) *OutputDtoType) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
+func HandleHTTPGet[OutputDtoType any](serviceFunc func(c *gin.Context) *OutputDtoType) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		response := serviceFunc(c)
 
-		queries := r.URL.Query()
-		ctx = context.WithValue(ctx, "CTX_QUERIES", &queries)
-
-		params := mux.Vars(r)
-		ctx = context.WithValue(ctx, "CTX_PARAMS", &params)
-
-		response := serviceFunc(&ctx)
-
-		w.Header().Set(string("Content-Type"), string("application/json"))
-		responseEncodeError := json.NewEncoder(w).Encode(common.SuccessDto{
+		c.JSON(http.StatusOK, common.SuccessDto{
 			Meta: common.AckDto{
 				Success: true,
 				Code:    "SUCCESS",
 			},
 			Data: response,
 		})
-
-		AssertError(responseEncodeError, http.StatusInternalServerError, "Error while parsing")
-
 	}
 }

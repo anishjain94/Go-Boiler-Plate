@@ -8,6 +8,8 @@ import (
 	"go-boiler-plate/util"
 	"net/http"
 	"testing"
+
+	"github.com/gin-gonic/gin"
 )
 
 func TestGetUser(t *testing.T) {
@@ -18,7 +20,7 @@ func TestGetUser(t *testing.T) {
 
 	ctx := context.Background()
 
-	user, err := GetUser(&ctx)
+	user, err := GetUser(ctx)
 	util.AssertError(err, http.StatusInternalServerError, "user not found")
 	fmt.Println(*user)
 

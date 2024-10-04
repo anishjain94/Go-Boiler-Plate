@@ -44,3 +44,56 @@ Contributions to this boilerplate are welcome! Please feel free to open an issue
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
+
+
+
+Folder structure
+/user-service
+    /cmd
+        main.go        
+    /common
+        constants.go
+        helpers.go
+    /config
+        config.yaml
+        .env
+    /docker
+        /compose
+        /dockerfiles
+        /scripts
+    /infra
+        /rest
+            rest.go
+        /redis
+            redis.go
+        /middleware
+            auth.middleware.go
+            cors.middleware.go
+            log.middleware.go
+            throttle.middleware.go
+        /database
+            /migration
+                001.sql
+            gorm.go
+        /environment
+            environment.go
+        /rest
+            rest.go
+        /handler
+            handler.go
+    /integrations
+        /google
+            google.go
+            google.helper.go
+            google.constants.go
+        /aws
+            aws.go
+    /modules
+        /health
+        /users
+    /utils
+        string.go
+        struct.go
+    go.mod
+    go.sum
+    README.md

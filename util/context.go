@@ -1,19 +1,23 @@
 package util
 
 import (
-	"context"
-	"net/http"
 	"net/url"
+
+	"github.com/gin-gonic/gin"
 )
 
-func GetContextQueries(ctx *context.Context) *url.Values {
-	queryValues := (*ctx).Value("CTX_QUERIES")
-	ErrorIf(queryValues == nil, http.StatusInternalServerError, "MSG_QUERIES_MISSING")
-	return queryValues.(*url.Values)
+func GetContextQueries(c *gin.Context) url.Values {
+	return c.Request.URL.Query()
 }
 
-func GetContextParams(ctx *context.Context) *map[string]string {
-	paramValues := (*ctx).Value("CTX_PARAMS")
-	ErrorIf(paramValues == nil, http.StatusInternalServerError, "MSG_PARAMS_MISSING")
-	return paramValues.(*map[string]string)
+func GetContextParams(c *gin.Context) gin.Params {
+	return c.Params
+}
+
+func GetContextQuery(c *gin.Context, key string) (string, bool) {
+	return c.GetQuery(key)
+}
+
+func GetContextParam(c *gin.Context, key string) string {
+	return c.Param(key)
 }

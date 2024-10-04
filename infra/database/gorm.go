@@ -1,11 +1,11 @@
 package database
 
 import (
-	"context"
 	"fmt"
 	"os"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -33,7 +33,6 @@ func InitializeGorm() {
 
 	gormDB = db
 }
-
-func GetDb(ctx *context.Context) *gorm.DB {
-	return gormDB.WithContext(*ctx)
+func GetDb(c *gin.Context) *gorm.DB {
+	return gormDB.WithContext(c)
 }

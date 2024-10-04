@@ -1,81 +1,45 @@
 package middleware
 
 import (
-	"context"
-	"encoding/json"
 	"go-boiler-plate/common"
 	"net/http"
-	"reflect"
 	"strconv"
 	"strings"
 
+	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
-func ErrorMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
+func ErrorMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Next()
 
-		r = r.WithContext(ctx)
-
-		defer HandleError(w, r)
-		next.ServeHTTP(w, r)
-	})
-}
-
-func HandleError(w http.ResponseWriter, r *http.Request) {
-	if err := recover(); err != nil {
-		ctx := r.Context()
-
-		w.Header().Set(string("Content-Type"), string("application/json"))
-
-		msg := getMessageFromError(err)
-		statusCode, msg := SeparateCodeFromMsg(&ctx, msg)
-
-		setStatusCode(w, statusCode)
-
-		dto := common.ToErrorDto(msg)
-
-		json.NewEncoder(w).Encode(dto)
+		if len(c.Errors) > 0 {
+			err := c.Errors.Last().Err
+			HandleError(c, err)
+		}
 	}
 }
 
-func getMessageFromError(err any) string {
+func HandleError(c *gin.Context, err error) {
+	statusCode, msg := SeparateCodeFromMsg(err.Error())
 
-	var msg string
-
-	if reflect.TypeOf(err).Kind().String() == "error" {
-		msg = err.(error).Error()
-	} else if reflect.TypeOf(err).Kind() == reflect.String {
-		msg = reflect.ValueOf(err).String()
-	} else {
-		msg = reflect.TypeOf(err).String()
-	}
-
-	stackField := zap.Stack("stack")
-	zap.L().Error(msg + "\n" + stackField.String)
-
-	return msg
+	c.JSON(statusCode, common.ToErrorDto(msg))
 }
 
-func SeparateCodeFromMsg(ctx *context.Context, msg string) (int, string) {
+func SeparateCodeFromMsg(msg string) (int, string) {
+	statusCode := http.StatusInternalServerError
 
-	statusCode := 200
-
-	parts := strings.Split(msg, ":")
+	parts := strings.SplitN(msg, ":", 2)
 
 	if len(parts) > 1 {
-		if codeInt, err := strconv.Atoi(parts[0]); err == nil {
-			statusCode = codeInt
-			msg = strings.Join(parts[1:], ":")
+		if code, err := strconv.Atoi(parts[0]); err == nil {
+			statusCode = code
+			msg = strings.TrimSpace(parts[1])
 		}
 	}
 
-	return statusCode, msg
-}
+	zap.L().Error(msg)
 
-func setStatusCode(w http.ResponseWriter, code int) {
-	if code >= 100 {
-		w.WriteHeader(code)
-	}
+	return statusCode, msg
 }

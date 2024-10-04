@@ -1,11 +1,10 @@
 package health
 
 import (
-	"context"
+	"github.com/gin-gonic/gin"
 )
 
-func getHealth(ctx *context.Context) *HealthResponseDto {
-
+func getHealth(c *gin.Context) *HealthResponseDto {
 	return &HealthResponseDto{
 		Message: "Healthy",
 	}

@@ -5,31 +5,27 @@ import (
 	"go-boiler-plate/infra/environment"
 	"go-boiler-plate/infra/middleware"
 	"go-boiler-plate/modules/health"
-	"log"
-	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
 func InitializeApiRestServer() {
-
-	router := mux.NewRouter().StrictSlash(true)
+	router := gin.Default()
 
 	initializeMiddleware(router)
 	initializeApiRoutes(router)
-	zap.L().Info("Http server up and running")
+
+	fmt.Println("Http server up and running")
 	zap.L().Debug("HTTP Api Server starting : " + fmt.Sprint(environment.PORT))
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", environment.PORT), router))
+	router.Run(fmt.Sprintf(":%v", environment.PORT))
 }
 
-func initializeMiddleware(router *mux.Router) {
-	router.Use(middleware.ErrorMiddleware)
-
+func initializeMiddleware(router *gin.Engine) {
+	router.Use(middleware.ErrorMiddleware())
+	router.Use()
 }
 
-func initializeApiRoutes(router *mux.Router) {
-
-	health.InitHealthRoute(router.PathPrefix("/health").Subrouter())
-
+func initializeApiRoutes(router *gin.Engine) {
+	health.InitHealthRoute(router.Group("/health"))
 }

@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-golang-image
+  labels:
+    app: my-golang-image
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-golang-image
+  template:
+    metadata:
+      labels:
+        app: my-golang-image
+    spec:
+      containers:
+        - name: my-golang-image
+          image: jainanish94/my_golang_image:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: POSTGRES_HOST
+              value: "postgres-service" # PostgreSQL service name
+            - name: POSTGRES_PORT
+              value: "5432" # PostgreSQL port (optional, default is 5432)
+            - name: POSTGRES_USER
+              value: "pice_backend" # Same as in the postgres deployment
+            - name: POSTGRES_PASSWORD
+              value: "password" # Same as in the postgres deployment
+            - name: POSTGRES_DB
+              value: "pice_backend_v2" # Same as in the postgres deployment
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-golang-image-service
+spec:
+  type: NodePort
+  ports:
+    - port: 8000
+      targetPort: 8000
+      nodePort: 30002
+  selector:
+    app: my-golang-image
+
+# POSTGRES
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:alpine
+          env:
+            - name: POSTGRES_USER
+              value: "pice_backend" # Set your PostgreSQL user
+            - name: POSTGRES_PASSWORD
+              value: "password" # Set your PostgreSQL password
+            - name: POSTGRES_DB
+              value: "pice_backend_v2" # Set your PostgreSQL database name
+          ports:
+            - containerPort: 5432
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+  selector:
+    app: postgres
