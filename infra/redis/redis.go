@@ -2,9 +2,10 @@ package redis
 
 import (
 	"context"
+	"fmt"
+	"go-boiler-plate/config"
 	"go-boiler-plate/util"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/go-redis/redis/v8"
@@ -17,13 +18,13 @@ var (
 	redisClient *redis.Client
 )
 
-func InitializeRedis() {
+func InitializeRedis(redisCfg *config.RedisConfig) {
 
 	redisClient = redis.NewClient(&redis.Options{
-		Addr:     os.Getenv("REDIS_HOST") + ":" + os.Getenv("REDIS_PORT"),
-		Password: os.Getenv("REDIS_PASSWORD"),
-		Username: os.Getenv("REDIS_USER"),
-		DB:       int(1),
+		Addr:     fmt.Sprintf("%s:%s", redisCfg.Host, redisCfg.Port),
+		Password: redisCfg.Password,
+		Username: redisCfg.User,
+		DB:       redisCfg.DB,
 	})
 
 	pong, err := redisClient.Ping(context.Background()).Result()
@@ -35,7 +36,6 @@ func InitializeRedis() {
 
 func Info(ctx *context.Context) (string, error) {
 	result, err := redisClient.Info(*ctx).Result()
-
 	return result, err
 }
 

@@ -2,7 +2,8 @@ package rest
 
 import (
 	"fmt"
-	"go-boiler-plate/infra/environment"
+	"go-boiler-plate/config"
+	"go-boiler-plate/infra/database"
 	"go-boiler-plate/infra/middleware"
 	"go-boiler-plate/modules/health"
 
@@ -10,15 +11,15 @@ import (
 	"go.uber.org/zap"
 )
 
-func InitializeApiRestServer() {
+func InitializeApiRestServer(cfg *config.Config) {
 	router := gin.Default()
 
 	initializeMiddleware(router)
 	initializeApiRoutes(router)
 
 	fmt.Println("Http server up and running")
-	zap.L().Debug("HTTP Api Server starting : " + fmt.Sprint(environment.PORT))
-	router.Run(fmt.Sprintf(":%v", environment.PORT))
+	zap.L().Debug("HTTP Api Server starting : " + fmt.Sprint(cfg.ServerConfig.Port))
+	router.Run(fmt.Sprintf(":%v", cfg.ServerConfig.Port))
 }
 
 func initializeMiddleware(router *gin.Engine) {
@@ -27,5 +28,7 @@ func initializeMiddleware(router *gin.Engine) {
 }
 
 func initializeApiRoutes(router *gin.Engine) {
-	health.InitHealthRoute(router.Group("/health"))
+	var healthFuncs []health.HealthFunc
+	healthFuncs = append(healthFuncs, database.Health())
+	health.InitHealthRoute(router.Group("/health"), healthFuncs...)
 }

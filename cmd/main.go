@@ -1,13 +1,15 @@
 package main
 
 import (
-	"go-boiler-plate/infra/environment"
+	"go-boiler-plate/infra/database"
 	"go-boiler-plate/infra/rest"
+	ihttp "go-boiler-plate/integrations/http_client"
 )
 
 func main() {
-	environment.InitializeEnvs()
-	// database.InitializeGorm()
+	cfg := ParseFlags()
 
-	rest.InitializeApiRestServer()
+	database.InitializeGorm(cfg.DBConfig)
+	ihttp.InitializeHttpClient(cfg.HttpClientConfig)
+	rest.InitializeApiRestServer(cfg)
 }
