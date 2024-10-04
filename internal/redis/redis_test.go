@@ -15,5 +15,4 @@ func TestRedisInit(t *testing.T) {
 
 	ctx := context.Background()
 	SetKey(&ctx, "one", "one", time.Hour)
-
 }

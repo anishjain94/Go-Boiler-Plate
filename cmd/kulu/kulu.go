@@ -1,13 +1,13 @@
 package main
 
 import (
-	"go-boiler-plate/infra/database"
-	"go-boiler-plate/infra/rest"
-	ihttp "go-boiler-plate/integrations/http_client"
+	"go-boiler-plate/internal/database"
+	ihttp "go-boiler-plate/internal/http_client"
+	"go-boiler-plate/internal/rest"
 )
 
 func main() {
-	cfg := ParseFlags()
+	cfg := parseFlags()
 
 	database.InitializeGorm(cfg.DBConfig)
 	ihttp.InitializeHttpClient(cfg.HttpClientConfig)

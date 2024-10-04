@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"go-boiler-plate/infra/database"
-	"go-boiler-plate/infra/environment"
 	"go-boiler-plate/util"
 	"net/http"
 	"testing"

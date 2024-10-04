@@ -10,7 +10,7 @@ import (
 	"github.com/joomcode/errorx"
 )
 
-var hc *httpclient.Client
+var HC *httpclient.Client
 
 func InitializeHttpClient(cfg *config.HttpClientConfig) {
 	var hcopts []httpclient.Option
@@ -26,5 +26,5 @@ func InitializeHttpClient(cfg *config.HttpClientConfig) {
 			},
 		}))
 	}
-	hc = httpclient.NewClient(hcopts...)
+	HC = httpclient.NewClient(hcopts...)
 }

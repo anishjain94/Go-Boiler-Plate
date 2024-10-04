@@ -3,8 +3,8 @@ package rest
 import (
 	"fmt"
 	"go-boiler-plate/config"
-	"go-boiler-plate/infra/database"
-	"go-boiler-plate/infra/middleware"
+	"go-boiler-plate/internal/database"
+	"go-boiler-plate/internal/middleware"
 	"go-boiler-plate/modules/health"
 
 	"github.com/gin-gonic/gin"
