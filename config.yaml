@@ -1,0 +1,24 @@
+environment: development
+
+server:
+  port: 8080
+
+# For making requests to external services
+http_client:
+  timeout_sec: 30
+  retries: 3
+  proxy_url: http://localhost:8000 # works otherthan production and staging environment
+
+db:
+  host: localhost
+  port: 5432
+  user: postgres
+  password: postgres
+  db_name: kulu_test_db
+  ssl_mode: disable
+
+redis:
+  host: localhost
+  port: 6379
+  password: ""
+  db: 0
